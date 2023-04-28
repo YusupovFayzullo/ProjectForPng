@@ -4,6 +4,7 @@ import dev.fayzullo.projectforpng.domains.Document;
 import dev.fayzullo.projectforpng.service.DocumentService;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileUrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -22,7 +23,8 @@ import java.nio.file.Path;
 public class DocumentController {
     private final DocumentService documentService;
 
-    private static final Path fileStorageLocation = Path.of("/home/yusupov/uploads/");
+    @Value("${uploads.folder}")
+    private String fileStorageLocation;
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Document> uploadFile(@RequestParam("file") MultipartFile file) {
@@ -37,7 +39,7 @@ public class DocumentController {
                 .contentType(MediaType.parseMediaType(document.getMimeType()))
                 .contentLength(document.getSize())
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + document.getGeneratedName())
-                .body(new FileUrlResource(String.format("%s/%s", fileStorageLocation, document.getGeneratedName())));
+                .body(new FileUrlResource(document.getFilePath()));
     }
 
     @GetMapping(value = "/open/{fileName}")
@@ -47,7 +49,7 @@ public class DocumentController {
                 .contentType(MediaType.parseMediaType(document.getMimeType()))
                 .contentLength(document.getSize())
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + document.getGeneratedName())
-                .body(new FileUrlResource(String.format("%s/%s", fileStorageLocation, document.getGeneratedName())));
+                .body(new FileUrlResource(document.getFilePath()));
     }
 
 

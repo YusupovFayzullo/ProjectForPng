@@ -12,15 +12,15 @@ spring:
   datasource:
       driverClassName: org.postgresql.Driver
       username: postgres
-      password: 123
-      url: jdbc:postgresql://localhost:5432/filestorage
+      password: 08203
+      url: jdbc:postgresql://localhost:5432/test
 
   profiles:
       active: prod
 
 
 uploads:
-   folder: /home/yusupov/uploads/
+   folder: D:/images/
 
 
 ---

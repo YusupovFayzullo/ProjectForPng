@@ -1,22 +1,21 @@
 package dev.fayzullo.projectforpng.service;
 
 
-import dev.fayzullo.projectforpng.ImageUtils;
 import dev.fayzullo.projectforpng.domains.Document;
 import dev.fayzullo.projectforpng.repository.DocumentRepository;
 import io.micrometer.common.lang.NonNull;
 import lombok.RequiredArgsConstructor;
-import net.coobird.thumbnailator.Thumbnails;
-import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.nio.file.Files;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,14 +44,13 @@ public class DocumentService {
 
 
         Document savedDocument = documentRepository.save(document);
-        String extension = savedDocument.getExtension();
+
         try {
+            File file1 = new File(document.getFilePath());
             InputStream inputStream = file.getInputStream();
-            File file1=new File(savedDocument.getFilePath());
             BufferedImage read = ImageIO.read(inputStream);
             file.transferTo(file1);
-            BufferedImage bufferedImage = resizeImage(read, 100, 100);
-            ImageIO.write(bufferedImage,extension,file1);
+            resizeImage(savedDocument.getExtension(),read,400,400,file1);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -60,9 +58,7 @@ public class DocumentService {
     }
 
 
-    BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight)  {
-        return Scalr.resize(originalImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, targetWidth, targetHeight, Scalr.OP_ANTIALIAS);
-    }
+
 
     public Document getDocumentBy(String fileName) {
         return getDocument(fileName).orElseThrow(() -> new RuntimeException("Document not found by "+fileName));
@@ -70,11 +66,27 @@ public class DocumentService {
 
     private Optional<Document> getDocument(String filename) {
         return documentRepository.findByGeneratedName(filename);
-
     }
 
     public String generateUniqueName(@NonNull String fileName) {
         return UUID.randomUUID() + "." + StringUtils.getFilenameExtension(fileName);
     }
+
+
+
+
+
+        public void resizeImage(String extension, BufferedImage image,
+                                int targetWidth, int targetHeight, File file) throws IOException {
+
+            BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, image.getType());
+            Graphics2D graphics = resizedImage.createGraphics();
+            graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+            graphics.drawImage(image, 0, 0, targetWidth, targetHeight, null);
+            graphics.dispose();
+            ImageIO.write(resizedImage, extension, file);
+        }
+
+
 
 }
