@@ -80,7 +80,7 @@ public class DocumentService {
                                 int targetWidth, int targetHeight, File file) throws IOException {
 
 
-           // BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, image.getType());
+            BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, image.getType());
             Graphics2D graphics = resizedImage.createGraphics();
             graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
             graphics.drawImage(image, 0, 0, targetWidth, targetHeight, null);
