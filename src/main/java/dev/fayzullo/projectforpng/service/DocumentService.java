@@ -84,7 +84,7 @@ public class DocumentService {
             Graphics2D graphics = resizedImage.createGraphics();
             graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
             graphics.drawImage(image, 0, 0, targetWidth, targetHeight, null);
-            // graphics.dispose();
+            graphics.dispose();
             ImageIO.write(resizedImage, extension, file);
         }
 
