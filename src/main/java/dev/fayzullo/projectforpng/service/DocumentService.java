@@ -41,8 +41,6 @@ public class DocumentService {
                 .filePath(fileStorageLocation+generateUniqueName)
                 .originalName(file.getOriginalFilename())
                 .build();
-        System.out.println();
-
         Document savedDocument = documentRepository.save(document);
 
         try {
