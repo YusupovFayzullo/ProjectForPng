@@ -11,6 +11,7 @@ import lombok.*;
 @Entity
 @Builder
 public class Document {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
