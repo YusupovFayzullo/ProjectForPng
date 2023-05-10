@@ -27,7 +27,6 @@ public class DocumentController {
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Document> uploadFile(@RequestParam("file") MultipartFile  file) {
-        System.out.println();
         return ResponseEntity.status(201).body(documentService.saveDocumentToServer(file));
     }
 
