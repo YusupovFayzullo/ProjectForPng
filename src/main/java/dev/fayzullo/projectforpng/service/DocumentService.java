@@ -42,8 +42,6 @@ public class DocumentService {
                 .originalName(file.getOriginalFilename())
                 .build();
         Document savedDocument = documentRepository.save(document);
-
-        System.out.println();
         try {
             File file1 = new File(document.getFilePath());
             InputStream inputStream = file.getInputStream();
