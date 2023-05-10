@@ -41,9 +41,9 @@ public class DocumentService {
                 .filePath(fileStorageLocation+generateUniqueName)
                 .originalName(file.getOriginalFilename())
                 .build();
-        System.out.println();
         Document savedDocument = documentRepository.save(document);
 
+        System.out.println();
         try {
             File file1 = new File(document.getFilePath());
             InputStream inputStream = file.getInputStream();
@@ -78,13 +78,13 @@ public class DocumentService {
         public void resizeImage(String extension, BufferedImage image,
                                 int targetWidth, int targetHeight, File file) throws IOException {
 
-
             BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, image.getType());
             Graphics2D graphics = resizedImage.createGraphics();
             graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
             graphics.drawImage(image, 0, 0, targetWidth, targetHeight, null);
             graphics.dispose();
             ImageIO.write(resizedImage, extension, file);
+
         }
 
 
