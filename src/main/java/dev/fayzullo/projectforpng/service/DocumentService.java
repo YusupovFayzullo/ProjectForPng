@@ -32,8 +32,6 @@ public class DocumentService {
 
 
     public Document saveDocumentToServer(MultipartFile file){
-
-        System.out.println();
         String generateUniqueName = generateUniqueName(Objects.requireNonNull(file.getOriginalFilename()));
         Document document = Document.builder()
                 .generatedName(generateUniqueName)
