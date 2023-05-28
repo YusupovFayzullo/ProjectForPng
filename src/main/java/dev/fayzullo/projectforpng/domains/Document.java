@@ -35,6 +35,8 @@ public class Document {
     @Column(nullable = false)
     private Long size;
 
+    private String name;
+
 
 
 }
