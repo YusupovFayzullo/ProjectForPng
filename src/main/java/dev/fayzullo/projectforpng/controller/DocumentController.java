@@ -33,7 +33,6 @@ public class DocumentController {
 
     @GetMapping(value = "/download/{fileName}")
     public ResponseEntity<FileUrlResource>  downloadFile(@PathVariable String fileName) throws MalformedURLException {
-        System.out.println();
         Document document= documentService.getDocumentBy(fileName);
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(document.getMimeType()))
