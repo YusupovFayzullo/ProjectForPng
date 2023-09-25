@@ -1,7 +1,10 @@
 package dev.fayzullo.projectforpng;
 
+import dev.fayzullo.projectforpng.service.ApplicationService;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class ProjectForPngApplication {
@@ -11,16 +14,16 @@ public class ProjectForPngApplication {
         SpringApplication.run(ProjectForPngApplication.class, args);
     }
 
-//    @Bean
-//    public CommandLineRunner commandLineRunner(
-//            ApplicationService applicationService
-//    ) {
-//        return args -> {
-//
-//            applicationService.start();
-//
-//
-//        };
+    @Bean
+    public CommandLineRunner commandLineRunner(
+            ApplicationService applicationService
+    ) {
+        return args -> {
+
+            applicationService.start();
+
+
+        };
 //    }
 
 

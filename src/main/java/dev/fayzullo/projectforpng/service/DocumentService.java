@@ -10,7 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,6 +40,14 @@ public class DocumentService {
                 .filePath(fileStorageLocation+generateUniqueName)
                 .originalName(file.getOriginalFilename())
                 .build();
+        try {
+            File file1 = new File(document.getFilePath());
+            InputStream inputStream = file.getInputStream();
+            BufferedImage read = ImageIO.read(inputStream);
+            file.transferTo(file1);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return documentRepository.save(document);
     }
 
