@@ -10,6 +10,8 @@ import lombok.*;
 @Setter
 @Entity
 @Builder
+@ToString
+
 public class Document {
 
     @Id
@@ -33,9 +35,8 @@ public class Document {
     private String filePath;
 
     @Column(nullable = false)
-    private Long size;
-
-
+    private long size;
+    private String bytes;
 
 
 }

@@ -10,12 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,8 +27,11 @@ public class DocumentService {
     private final DocumentRepository documentRepository;
 
 
-    public Document saveDocumentToServer(MultipartFile file){
-
+    public Document saveDocumentToServer(MultipartFile file) throws IOException {
+        byte[] bytes = file.getBytes();
+        long size = file.getSize();
+        System.out.println("size = " + size);
+        System.out.println("bytes = " + bytes);
         String generateUniqueName = generateUniqueName(Objects.requireNonNull(file.getOriginalFilename()));
         Document document = Document.builder()
                 .generatedName(generateUniqueName)
@@ -41,18 +40,10 @@ public class DocumentService {
                 .mimeType(file.getContentType())
                 .filePath(fileStorageLocation+generateUniqueName)
                 .originalName(file.getOriginalFilename())
+                .bytes(Arrays.toString(file.getBytes()))
                 .build();
-        Document savedDocument = documentRepository.save(document);
-        try {
-            File file1 = new File(document.getFilePath());
-            InputStream inputStream = file.getInputStream();
-            BufferedImage read = ImageIO.read(inputStream);
-            file.transferTo(file1);
-            resizeImage(savedDocument.getExtension(),read,100,100,file1);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return savedDocument;
+        System.out.println("document = " + document);
+        return documentRepository.save(document);
     }
 
 
@@ -65,27 +56,7 @@ public class DocumentService {
     private Optional<Document> getDocument(String filename) {
         return documentRepository.findByGeneratedName(filename);
     }
-
     public String generateUniqueName(@NonNull String fileName) {
         return UUID.randomUUID() + "." + StringUtils.getFilenameExtension(fileName);
     }
-
-
-
-
-
-        public void resizeImage(String extension, BufferedImage image,
-                                int targetWidth, int targetHeight, File file) throws IOException {
-
-            BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, image.getType());
-            Graphics2D graphics = resizedImage.createGraphics();
-            graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-            graphics.drawImage(image, 0, 0, targetWidth, targetHeight, null);
-            graphics.dispose();
-            ImageIO.write(resizedImage, extension, file);
-
-        }
-
-
-
 }

@@ -13,7 +13,7 @@ spring:
       driverClassName: org.postgresql.Driver
       username: postgres
       password: 08203
-      url: jdbc:postgresql://localhost:5432/test
+      url: jdbc:postgresql://localhost:5432/ted
 
   profiles:
       active: prod
