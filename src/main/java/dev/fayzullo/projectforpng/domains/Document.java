@@ -36,7 +36,6 @@ public class Document {
 
     @Column(nullable = false)
     private long size;
-    private String bytes;
 
 
 }

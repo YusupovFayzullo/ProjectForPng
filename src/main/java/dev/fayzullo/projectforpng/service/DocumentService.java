@@ -11,7 +11,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,10 +27,6 @@ public class DocumentService {
 
 
     public Document saveDocumentToServer(MultipartFile file) throws IOException {
-        byte[] bytes = file.getBytes();
-        long size = file.getSize();
-        System.out.println("size = " + size);
-        System.out.println("bytes = " + bytes);
         String generateUniqueName = generateUniqueName(Objects.requireNonNull(file.getOriginalFilename()));
         Document document = Document.builder()
                 .generatedName(generateUniqueName)
@@ -40,9 +35,7 @@ public class DocumentService {
                 .mimeType(file.getContentType())
                 .filePath(fileStorageLocation+generateUniqueName)
                 .originalName(file.getOriginalFilename())
-                .bytes(Arrays.toString(file.getBytes()))
                 .build();
-        System.out.println("document = " + document);
         return documentRepository.save(document);
     }
 

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -68,13 +67,6 @@ public class UserService {
     private Optional<Document> existUser(MultipartFile file) {
         long size = file.getSize();
         String originalFilename = file.getOriginalFilename();
-        byte[] bytes = new byte[0];
-        try {
-            bytes = file.getBytes();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        String string = Arrays.toString(bytes);
-        return documentRepository.findImage(string, originalFilename, size);
+        return documentRepository.findImage( originalFilename, size);
     }
 }

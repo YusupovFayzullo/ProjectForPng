@@ -12,6 +12,6 @@ public interface DocumentRepository extends JpaRepository<Document,Long> {
 
     Optional<Document> findByGeneratedName( String generatedName);
 
-    @Query("select d from Document d where  d.bytes=?1 and d.originalName=?2 and d.size=?3")
-    Optional<Document> findImage(String bytes, String originalName, long size);
+    @Query("select d from Document d  where d.originalName=?1 and d.size=?2")
+    Optional<Document> findImage( String originalName, long size);
 }
